@@ -1,11 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
 import './App.css';
+import ListingBody from './Components/Listing-Body';
+import { productStore } from './Store/ProductStore';
+import '@mantine/core/styles.css';
 
 function App() {
   return (
-    <div className="App text-3xl font-bold underline">
-      hi
+    <div className="App">
+      <Provider store={productStore}>
+        <ListingBody/>
+      </Provider>
     </div>
   );
 }
