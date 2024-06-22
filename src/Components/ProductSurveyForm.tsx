@@ -330,7 +330,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                     ({field, meta}: FieldProps) => {
                                       return(
                                         <div className='grid w-11/12'>
-                                          <SegmentedControl w={300} name='productMobileSpecs.softwareType' data={[MobileDeviceType[1],MobileDeviceType[0]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
+                                          <SegmentedControl w={'100%'} name='productMobileSpecs.softwareType' data={[MobileDeviceType[1],MobileDeviceType[0]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
                                           {
                                             (meta.error && meta.touched) && 
                                             <span className='text-red-500 place-self-start pt-1 pl-1'>{meta.error}</span>
@@ -395,7 +395,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                       ({field, meta}: FieldProps) => {
                                         return(
                                           <div className='grid w-11/12'>
-                                            <SegmentedControl w={300} name='productTelevisionSpecs.deviceType' data={[TelevisionSoftwareType[1],TelevisionSoftwareType[0]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
+                                            <SegmentedControl w={'100%'} name='productTelevisionSpecs.deviceType' data={[TelevisionSoftwareType[1],TelevisionSoftwareType[0]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
                                             {
                                               (meta.error && meta.touched) && 
                                               <span className='text-red-500 place-self-start pt-1 pl-1'>{meta.error}</span>
@@ -429,7 +429,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                     ({field, meta}: FieldProps) => {
                                       return(
                                         <div className='grid w-11/12'>
-                                          <SegmentedControl w={300} name='productClothSpecs.clothType' data={[ClothType[0],ClothType[1],ClothType[2],ClothType[3]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
+                                          <SegmentedControl w={'100%'} name='productClothSpecs.clothType' data={[ClothType[0],ClothType[1],ClothType[2],ClothType[3]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
                                           {
                                               (meta.error && meta.touched) && 
                                               <span className='text-red-500 place-self-start pt-1 pl-1'>{meta.error}</span>
@@ -456,7 +456,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                       ({field, meta}: FieldProps) => {
                                         return(
                                           <div className='grid w-11/12'>
-                                            <SegmentedControl w={300} name='productTelevisionSpecs.clothSize' data={[ClothSizeType[0],ClothSizeType[1],ClothSizeType[2],ClothSizeType[3]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
+                                            <SegmentedControl w={'100%'} name='productTelevisionSpecs.clothSize' data={[ClothSizeType[0],ClothSizeType[1],ClothSizeType[2],ClothSizeType[3]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
                                             {
                                               (meta.error && meta.touched) && 
                                               <span className='text-red-500 place-self-start pt-1 pl-1'>{meta.error}</span>
@@ -483,7 +483,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                     ({field, meta}: FieldProps) => {
                                       return(
                                         <div className='grid w-11/12'>
-                                          <SegmentedControl w={300} name='productTelevisionSpecs.clothFabric' data={[ClothFabricType[0],ClothFabricType[1],ClothFabricType[2]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
+                                          <SegmentedControl w={'100%'} name='productTelevisionSpecs.clothFabric' data={[ClothFabricType[0],ClothFabricType[1],ClothFabricType[2]]} color="gray" defaultValue={field.value} onChange={(val) => formik.setFieldValue(field.name, val)} />
                                           {
                                             (meta.error && meta.touched) && 
                                             <span className='text-red-500 place-self-start pt-1 pl-1'>{meta.error}</span>
@@ -509,7 +509,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                     ({field, meta}: FieldProps) => {
                                       return(
                                         <div className='grid w-11/12'>
-                                          <Radio.Group id='productClothSpecs.clothColor' name='productClothSpecs.clothColor' onChange={(val: string) => formik.setFieldValue(field.name, val)} value={field.value}>
+                                          <Radio.Group w={'100%'} id='productClothSpecs.clothColor' name='productClothSpecs.clothColor' onChange={(val: string) => formik.setFieldValue(field.name, val)} value={field.value}>
                                               <Group mt="xs">
                                                 <Radio value='Red' label='Red' />
                                                 <Radio value='Blue' label='Blue' />
