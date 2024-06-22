@@ -2,9 +2,9 @@ export interface ProductType{
   productId: string,
   productTitle: string,
   productDescription: string,
-  productCategory: string,
   productPrice: string,
   purchasedDate: Date,
+  productCategory: string,
   productMobileSpecs?: {
     ramSize: string,
     storageSize: string,
