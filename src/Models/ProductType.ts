@@ -1,10 +1,16 @@
-export interface ProductType{
+export interface ProductType extends ProductBase, ProductDetails {
   productId: string,
+}
+
+export interface ProductBase {
   productTitle: string,
   productDescription: string,
-  productCategory: string,
   productPrice: string,
   purchasedDate: Date,
+}
+
+export interface ProductDetails {
+  productCategory: string,
   productMobileSpecs?: {
     ramSize: string,
     storageSize: string,

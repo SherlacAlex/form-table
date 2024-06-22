@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ProductType } from '../Models/ProductType'
 import { ProductState, deleteProduct } from '../Store/ProductSlice'
 import { format } from 'date-fns/format'
 import { IconPlus, IconTrash, IconUnlink } from '@tabler/icons-react'
-import { ActionIcon, Button, Table } from '@mantine/core'
+import { ActionIcon, Button, Modal, Table } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import ProductSurveyForm from './ProductSurveyForm'
+import { ModalsProvider } from '@mantine/modals'
 
 function ListingBody() {
 
   const productsList = useSelector((state: ProductState) => state.products)
+  
+  const [currentProduct, setCurrentProduct] = useState<ProductType>({} as ProductType);
+
+  const [modalOpened, { open, close }] = useDisclosure(false);
 
   const dispatch = useDispatch();
 
@@ -16,17 +23,46 @@ function ListingBody() {
     dispatch(deleteProduct(prop.productId));
   }
 
-  const triggerModal = (product: ProductType) => {
+  const triggerModal = (prop?: ProductType) => {
+    if(!prop){
+      setCurrentProduct({} as ProductType)
+    }
+    else {
+      setCurrentProduct(prop)
+    }
+    open()
+  }
 
+  const openModal = () => {
+    return(
+      <>
+        <Modal.Root opened={modalOpened} onClose={close} >
+        <Modal.Overlay />
+        <Modal.Content miw={900} w={1000}>
+          <Modal.Header bg={'indigo.2'}>
+            <Modal.Title>{currentProduct?.productTitle ? ` Edit ${currentProduct?.productTitle}` : 'Add Product'}</Modal.Title>
+            <Modal.CloseButton />
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              <ModalsProvider>
+                <ProductSurveyForm product={currentProduct} closeDialog={close}/>
+              </ModalsProvider>
+            </div>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal.Root>
+      </>
+    )
   }
 
   const generateRows = () => {
     if(productsList.length > 0) {
-       return productsList.map((product: ProductType) => {
+      return productsList.map((product: ProductType) => {
         return (
           <Table.Tr key={product.productId}>
             <Table.Td ta={'center'}>
-              <div className="name-container" onClick={() => triggerModal(product)}>
+              <div className="name-container text-blue-600 underline underline-offset-4" onClick={() => triggerModal(product)}>
                 {product.productTitle}
               </div>
             </Table.Td>
@@ -73,8 +109,9 @@ function ListingBody() {
 
   return (
     <div className='main-container  grid place-items-center'>
+      {openModal()}
       <div className="add-new-contianer my-4">
-        <Button radius="xl" color="lime" leftSection={<IconPlus/>}>Add</Button>
+        <Button radius="xl" color="lime" leftSection={<IconPlus/>} onClick={() => triggerModal()}>Add</Button>
       </div>
       <div className="table-container w-[90%] my-4" style={{border: '1px solid var(--mantine-color-gray-3)', borderRadius:'6px'}}>
         {generateTable()}
