@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ProductType } from '../Models/ProductType'
 import { ProductState, deleteProduct } from '../Store/ProductSlice'
 import { format } from 'date-fns/format'
-import { IconPlus, IconTrash, IconUnlink } from '@tabler/icons-react'
-import { ActionIcon, Button, Modal, Table } from '@mantine/core'
+import { IconPlus, IconTrash, IconUnlink,IconX, IconCheck } from '@tabler/icons-react'
+import { ActionIcon, Button, Modal, Table, rem } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import ProductSurveyForm from './ProductSurveyForm'
 import { ModalsProvider } from '@mantine/modals'
+import { notifications } from '@mantine/notifications';
 
 function ListingBody() {
 
@@ -21,6 +22,14 @@ function ListingBody() {
 
   const deleteItem = (prop: ProductType) => {
     dispatch(deleteProduct(prop.productId));
+    notifications.show({
+      title: 'Product Removed',
+      message: 'The product was successfully removed from the system.',
+      icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+      color:'red',
+      autoClose: 4000,
+      withBorder: true,
+    })
   }
 
   const triggerModal = (prop?: ProductType) => {
@@ -31,6 +40,29 @@ function ListingBody() {
       setCurrentProduct(prop)
     }
     open()
+  }
+
+  const productUpdate = (update?: boolean) => {
+    close();
+    if(update === true) {
+      notifications.show({
+        title: 'Product Updated',
+        message: 'Updates were successfully entered into the system.',
+        icon: <IconCheck  style={{ width: rem(20), height: rem(20) }} />,
+        color: 'teal',
+        autoClose: 4000,
+        withBorder: true
+      })
+    }else if(update === false) {
+      notifications.show({
+        title: 'Product Added',
+        message: 'The product was successfully entered into the system',
+        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        color: 'teal',
+        autoClose: 4000,
+        withBorder: true,
+      })
+    }
   }
 
   const openModal = () => {
@@ -46,7 +78,7 @@ function ListingBody() {
           <Modal.Body>
             <div>
               <ModalsProvider>
-                <ProductSurveyForm product={currentProduct} closeDialog={close}/>
+                <ProductSurveyForm product={currentProduct} closeDialog={(val?: boolean)=> productUpdate(val)}/>
               </ModalsProvider>
             </div>
           </Modal.Body>
