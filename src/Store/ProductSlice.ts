@@ -1,5 +1,5 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
-import { ProductType } from "../Models/ProductType";
+import { ProductRating, ProductType } from "../Models/ProductType";
 import { MobileDeviceType, ProductCategory } from "../Models/ProductEnums";
 
 export interface ProductState {
@@ -29,6 +29,7 @@ const initialState: ProductState = {
           clothColor: '',
           clothFabric: '',
         },
+        productReviews: [] as ProductRating[]
       }]
 }
 

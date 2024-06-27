@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ProductType } from '../Models/ProductType'
+import { ProductRating, ProductType } from '../Models/ProductType'
 import { ClothFabricType, ClothSizeType, ClothType, MobileDeviceType, ProductCategory, TelevisionSoftwareType } from '../Models/ProductEnums';
 import { useDispatch } from 'react-redux';
 import { Button, Group, Input, Paper, Radio, SegmentedControl, Select, Stepper, Text, Title } from '@mantine/core';
@@ -8,6 +8,7 @@ import { Field, FieldProps, Form, Formik, FormikErrors, FormikHelpers, FormikPro
 import { object, string } from 'yup';
 import { DatePickerInput, DatesProvider } from '@mantine/dates';
 import { addProduct, updateProduct } from '../Store/ProductSlice';
+import ReviewTable from './ReviewTable';
 
 interface ProductSurveyFormType {
   product?: ProductType,
@@ -55,7 +56,8 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
       clothColor: product?.productClothSpecs?.clothColor? product.productClothSpecs.clothColor : '',
       clothFabric: product?.productClothSpecs?.clothFabric? product.productClothSpecs.clothFabric : '',
     },
-    purchasedDate: product?.purchasedDate? product.purchasedDate : null
+    purchasedDate: product?.purchasedDate? product.purchasedDate : null,
+    productReviews: product?.productReviews ? product.productReviews : [],
   } as ProductType;
 
   const formValidationSchema = object().shape({
@@ -141,7 +143,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
 
   const handleStep = async (step: number,formik: FormikProps<ProductType>) => {
     let hasError: string[] = [];
-    if(active === 0) {
+    if(step === 0) {
       await formik.setFieldTouched('productPrice').then((val: void |FormikErrors<ProductType>) => val?.productPrice? hasError.push('productPrice'): null)
       await formik.setFieldTouched('productTitle').then((val: void |FormikErrors<ProductType>) => val?.productTitle? hasError.push('productTitle'): null)
     }
@@ -550,6 +552,20 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                             </div>
                           }
                         </Stepper.Step>
+                        <Stepper.Step allowStepSelect={shouldAllowSelectStep(2)} label='Ratings' description='User Reviews and Feedback'>
+                          {/* Product Ratings */}
+                          <Field name='productReviews'>
+                            {
+                              ({field}: FieldProps) => {
+                                return(
+                                  <div className="table-container">
+                                    <ReviewTable reviews={field.value} tableChanged={(val: ProductRating[]) => formik.setFieldValue(field.name, val)}/>
+                                  </div>
+                                )
+                              }
+                            }
+                          </Field>
+                        </Stepper.Step>
                       </Stepper>
                       <Group className='test' justify="end" mt="xl">
                           <Button variant="default" onClick={openDiscardModal}>
@@ -558,7 +574,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                           <Button variant="default" onClick={() => handleStep(-1,formik)}>
                             Back
                           </Button>
-                          <Button onClick={() => active === 1 ? formik.submitForm() : handleStep(1,formik)}>{active === 1? 'Submit' :'Next step'}</Button>
+                          <Button onClick={() => active === 2 ? formik.submitForm() : handleStep(1,formik)}>{active === 2? 'Submit' :'Next step'}</Button>
                         </Group>
                     </Form>
                   )
