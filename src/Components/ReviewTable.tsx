@@ -92,7 +92,7 @@ function ReviewTable({ reviews, tableChanged }: ReviewTableProps) {
     let row: ProductRating = {
       reviewId: uuid,
       productRating: 0,
-      productReview: ''
+      productFeedback: ''
     } as ProductRating;
     const updatedReviews: ProductRating[] = [...productReviews, row ];
     setProductReviews(updatedReviews);

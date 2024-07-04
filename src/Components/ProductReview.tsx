@@ -10,11 +10,11 @@ interface ProductReviewProps {
 
 function ProductReview({ review, contentChanged }: ProductReviewProps) {
 
-  const [showEdit, setShowEdit] = useState<Boolean>(review.productReview? true: false);
-  const [reviewContent, setProductReview] = useState<string>(review.productReview);
+  const [showEdit, setShowEdit] = useState<Boolean>(review.productFeedback? true: false);
+  const [reviewContent, setProductReview] = useState<string>(review.productFeedback);
   
   const updateReview = () => { 
-    const newReview: ProductRating = {...review, productReview: reviewContent}
+    const newReview: ProductRating = {...review, productFeedback: reviewContent}
     setShowEdit(true)
     contentChanged(newReview)
   }

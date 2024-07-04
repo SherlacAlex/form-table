@@ -15,22 +15,22 @@ const initialState: ProductState = {
         purchasedDate: new Date(Date.now()),
         productPrice: '500$',
         productMobileSpecs: {
-          ramSize: '6GB',
-          storageSize:'64GB',
-          softwareType:MobileDeviceType[MobileDeviceType.Android]
+            ramSize: '6GB',
+            storageSize:'64GB',
+            softwareType:MobileDeviceType[MobileDeviceType.Android]
         },
         productTelevisionSpecs: {
-          displaySize: '',
-          deviceType: '',
+            displaySize: '',
+            deviceType: '',
         },
         productClothSpecs: {
-          clothType: '',
-          clothSize: '',
-          clothColor: '',
-          clothFabric: '',
+            clothType: '',
+            clothSize: '',
+            clothColor: '',
+            clothFabric: '',
         },
         productReviews: [] as ProductRating[]
-      }]
+    }]
 }
 
 export const productSlice = createSlice({

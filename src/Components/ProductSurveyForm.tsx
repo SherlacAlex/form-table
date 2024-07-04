@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { ProductRating, ProductType } from '../Models/ProductType'
+import { useMemo, useRef, useState } from 'react'
+import { ProductBase, ProductDetails, ProductRating, ProductType, ProductReview } from '../Models/ProductType'
 import { ClothFabricType, ClothSizeType, ClothType, MobileDeviceType, ProductCategory, TelevisionSoftwareType } from '../Models/ProductEnums';
 import { useDispatch } from 'react-redux';
 import { Button, Group, Input, Paper, Radio, SegmentedControl, Select, Stepper, Text, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Field, FieldProps, Form, Formik, FormikErrors, FormikHelpers, FormikProps, FormikState } from 'formik';
-import { object, string } from 'yup';
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import { DatePickerInput, DatesProvider } from '@mantine/dates';
 import { addProduct, updateProduct } from '../Store/ProductSlice';
 import ReviewTable from './ReviewTable';
+import { formHelperService } from '../services/FormHelperService';
 
 interface ProductSurveyFormType {
   product?: ProductType,
@@ -20,91 +20,15 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
   const [active, setActive] = useState(0);
   const [highestStepVisited, setHighestStepVisited] = useState(active);
   const [changed, setChanged] = useState(false);
+  var productInfo = useRef(formHelperService.getProductInfo());
 
-  const handleStepChange = (nextStep: number) => {
-    const isOutOfBounds = nextStep > 3 || nextStep < 0;
+  const defaultDetailsValue: ProductBase = formHelperService.getDefaultDetailsValues(product);
+  const defualtSpecificationValue: ProductDetails = formHelperService.getDefaultSpecificationValues(product);
+  const defualtFeedbackValues: ProductReview = formHelperService.getDefaultFeedbackValues(product);
 
-    if (isOutOfBounds) {
-      return;
-    }
-
-    setActive(nextStep);
-    setHighestStepVisited((hSC) => Math.max(hSC, nextStep));
-  };
-
-  // Allow the user to freely go back and forth between visited steps.
-  const shouldAllowSelectStep = (step: number) => highestStepVisited >= step && active !== step;
-  
-  let defaultValue: ProductType = {
-    productId: product?.productId? product.productId :'',
-    productTitle: product?.productTitle? product.productTitle :'',
-    productDescription:  product?.productDescription? product.productDescription :'',
-    productPrice: product?.productPrice? product.productPrice :'',
-    productCategory: product?.productCategory? product.productCategory : ProductCategory[ProductCategory.Mobile],
-    productMobileSpecs: {
-      ramSize: product?.productMobileSpecs?.ramSize? product.productMobileSpecs.ramSize : '',
-      storageSize: product?.productMobileSpecs?.storageSize? product.productMobileSpecs.storageSize : '',
-      softwareType: product?.productMobileSpecs?.softwareType? product.productMobileSpecs.softwareType : ''
-    },
-    productTelevisionSpecs: {
-      displaySize: product?.productTelevisionSpecs?.displaySize? product.productTelevisionSpecs.displaySize : '',
-      deviceType: product?.productTelevisionSpecs?.deviceType? product.productTelevisionSpecs.deviceType : '',
-    },
-    productClothSpecs: {
-      clothType: product?.productClothSpecs?.clothType? product.productClothSpecs.clothType : '',
-      clothSize: product?.productClothSpecs?.clothSize? product.productClothSpecs.clothSize : '',
-      clothColor: product?.productClothSpecs?.clothColor? product.productClothSpecs.clothColor : '',
-      clothFabric: product?.productClothSpecs?.clothFabric? product.productClothSpecs.clothFabric : '',
-    },
-    purchasedDate: product?.purchasedDate? product.purchasedDate : null,
-    productReviews: product?.productReviews ? product.productReviews : [],
-  } as ProductType;
-
-  const formValidationSchema = object().shape({
-    productTitle: string().required('Required').max(12,'Title should not exceed 12 characters'),
-    productDescription: string(),
-    productPrice: string().required('Required'),
-    productCategory: string().required('Required'),
-    productMobileSpecs: object().when('productCategory', {
-      is: (productCategory:string) => productCategory === ProductCategory[ProductCategory.Mobile],
-      then: () => object().shape({
-        ramSize: string().required('Required'),
-        storageSize: string().required('Required'),
-        softwareType: string().required('Required'),
-      }),
-      otherwise: () => object().shape({
-        ramSize: string(),
-        storageSize: string(),
-        softwareType: string(),
-      }),
-    }),
-    productTelevisionSpecs: object().when('productCategory', {
-      is: (productCategory: string) => productCategory === ProductCategory[ProductCategory.Television],
-      then: () => object().shape({
-        displaySize: string().required('Required'),
-        deviceType: string().required('Required'),
-      }),
-      otherwise: () => object().shape({
-        displaySize: string(),
-        deviceType: string(),
-      }),
-    }),
-    productClothSpecs: object().when('productCategory', {
-      is: (productCategory: string) => productCategory === ProductCategory[ProductCategory.Clothes],
-      then: () => object().shape({
-        clothType: string().required('Required'),
-        clothSize: string().required('Required'),
-        clothColor: string().required('Required'),
-        clothFabric: string().required('Required'),
-      }),
-      otherwise: () => object().shape({
-        clothType: string(),
-        clothSize: string(),
-        clothColor: string(),
-        clothFabric: string(),
-      }),
-    }),
-  });
+  const detailsValidationSchema = formHelperService.getDetailsValidationSchema();
+  const specificationValidationSchema = formHelperService.getSpecificationValidationSchema();
+  const feedbackValidationSchema = formHelperService.getFeedbackValidationSchema();
 
   const dispatch = useDispatch()
 
@@ -129,42 +53,71 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
     }
   };
 
-  const submitForm = (data: ProductType, { resetForm }: FormikHelpers<ProductType>) => {
-    if(data.productId) {
-      dispatch(updateProduct(data));
+  const handleStepChange = (nextStep: number) => {
+    const isOutOfBounds = nextStep > 3 || nextStep < 0;
+
+    if (isOutOfBounds) {
+      return;
+    }
+
+    setActive(nextStep);
+    setHighestStepVisited((hSC) => Math.max(hSC, nextStep));
+  };
+
+  // Allow the user to freely go back and forth between visited steps.
+  const shouldAllowSelectStep = (step: number) => highestStepVisited >= step && active !== step;
+
+
+  const submitBaseForm = (data: ProductBase) => {
+    handleStepChange(active + 1);
+    productInfo.current = {...productInfo.current, ...data};
+  }
+
+  const submitDetailsForm = (data: ProductDetails) => {
+    handleStepChange(active + 1);
+    productInfo.current = {...productInfo.current, ...data};
+  }
+  
+  const submitFeedbackForm = (data: ProductReview) => {
+    productInfo.current = {...productInfo.current, ...data};
+    if(product?.productId) {
+      dispatch(updateProduct(productInfo.current));
       closeDialog(true);
     }
     else {
-      dispatch(addProduct(data));
+      dispatch(addProduct(productInfo.current));
       closeDialog(false);
     }
-    resetForm(defaultValue as Partial<FormikState<ProductType>>);
   }
 
-  const handleStep = async (step: number,formik: FormikProps<ProductType>) => {
-    let hasError: string[] = [];
-    if(step === 0) {
-      await formik.setFieldTouched('productPrice').then((val: void |FormikErrors<ProductType>) => val?.productPrice? hasError.push('productPrice'): null)
-      await formik.setFieldTouched('productTitle').then((val: void |FormikErrors<ProductType>) => val?.productTitle? hasError.push('productTitle'): null)
-    }
-    if(hasError.length === 0) {
-      handleStepChange(active + step)
-    }
-    // handleStepChange(active + 1)
-  } 
+  const getNavigationButtons = (formik: FormikProps<ProductBase | ProductDetails | ProductReview>) => {
+    return(
+      <>
+        <Group justify="end" mt="xl">
+          <Button variant="default" onClick={openDiscardModal}>
+            Cancel
+          </Button>
+          <Button variant="default" disabled={active === 0} onClick={() => handleStepChange(active - 1)}>
+            Back
+          </Button>
+          <Button onClick={() => formik.submitForm()}>{active === 2? 'Submit' :'Next step'}</Button>
+        </Group>
+      </>
+    )
+  }
 
   const generateForm = () => {
     return(
       <>
         <div className="form-container mt-6 w-full">
           <Paper shadow="xs" radius="lg" withBorder p="xl">
-            <Formik validateOnChange={true} onChange={() => !changed? setChanged(true): null} initialValues={defaultValue} onSubmit={submitForm} validationSchema={formValidationSchema} >
-              {
-                (formik) => {
-                  return(
-                    <Form >
-                      <Stepper active={active} onStepClick={setActive}>
-                        <Stepper.Step allowStepSelect={shouldAllowSelectStep(0)} label={product?.productTitle ? product?.productTitle : 'Product'} description={product?.productTitle ? `Edit ${product?.productTitle}` : 'Add a Product'}>
+            <Stepper active={active} onStepClick={setActive}>
+              <Stepper.Step allowStepSelect={shouldAllowSelectStep(0)} label={product?.productTitle ? `${product?.productTitle} Details` : 'Product Details'} description={product?.productTitle ? `Edit ${product?.productTitle}` : 'Add a Product'}>
+                <Formik key={1} enableReinitialize validateOnChange={true} initialValues={defaultDetailsValue} onSubmit={submitBaseForm} validationSchema={detailsValidationSchema} >
+                  {
+                    (formik) => {
+                      return(
+                        <Form onChange={() => !changed? setChanged(true): null}>
                           {/* Product Title */}
                           <div className="content-control flex py-4  h-20 justify-items-start">
                             <div className="title-container w-1/3 flex items-center ">
@@ -256,8 +209,21 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                               </div>
                             </div>
                           </div> 
-                        </Stepper.Step>
-                        <Stepper.Step allowStepSelect={shouldAllowSelectStep(1)} label={product?.productTitle ? `${product?.productTitle} Details` : 'Product'} description={product?.productTitle ? `Update ${product?.productTitle}` : ' Product Details'}>
+                          {
+                            getNavigationButtons(formik as FormikProps<ProductBase | ProductDetails | ProductReview>)
+                          }
+                        </Form>
+                      )
+                    }
+                  }
+                </Formik>
+              </Stepper.Step>
+              <Stepper.Step allowStepSelect={shouldAllowSelectStep(1)} label={product?.productTitle ? `${product?.productTitle} Specifications` : 'Product Specifications'} description={product?.productTitle ? `Update ${product?.productTitle}` : ' Product Details'}>
+                <Formik key={2} enableReinitialize validateOnChange={true} initialValues={defualtSpecificationValue} onSubmit={submitDetailsForm} validationSchema={specificationValidationSchema} >
+                  {
+                    (formik) => {
+                      return (
+                        <Form onChange={() => !changed? setChanged(true): null}>
                           {/* Product Category */}
                           <div className="content-control flex  py-4  h-20">
                             <div className="title-container w-1/3 flex items-center">
@@ -551,8 +517,21 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                               </div>
                             </div>
                           }
-                        </Stepper.Step>
-                        <Stepper.Step allowStepSelect={shouldAllowSelectStep(2)} label='Ratings' description='User Reviews and Feedback'>
+                          {
+                            getNavigationButtons(formik as FormikProps<ProductBase | ProductDetails | ProductReview>)
+                          }
+                        </Form>
+                      )
+                    }
+                  }
+                </Formik>
+              </Stepper.Step>
+              <Stepper.Step allowStepSelect={shouldAllowSelectStep(2)} label='Ratings' description='User Reviews and Feedback'>
+                <Formik key={3} enableReinitialize validateOnChange={true} initialValues={defualtFeedbackValues} onSubmit={submitFeedbackForm} validationSchema={feedbackValidationSchema}>
+                  {
+                    (formik) => {
+                      return(
+                        <Form onChange={() => !changed? setChanged(true): null}>
                           {/* Product Ratings */}
                           <Field name='productReviews'>
                             {
@@ -565,22 +544,16 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                               }
                             }
                           </Field>
-                        </Stepper.Step>
-                      </Stepper>
-                      <Group className='test' justify="end" mt="xl">
-                          <Button variant="default" onClick={openDiscardModal}>
-                            Cancel
-                          </Button>
-                          <Button variant="default" onClick={() => handleStep(-1,formik)}>
-                            Back
-                          </Button>
-                          <Button onClick={() => active === 2 ? formik.submitForm() : handleStep(1,formik)}>{active === 2? 'Submit' :'Next step'}</Button>
-                        </Group>
-                    </Form>
-                  )
-                }
-              }
-            </Formik>
+                          {
+                            getNavigationButtons(formik as FormikProps<ProductBase | ProductDetails | ProductReview>)
+                          }
+                        </Form>
+                      )
+                    }
+                  }
+                </Formik>
+              </Stepper.Step>
+            </Stepper>
           </Paper>
         </div>
       </>

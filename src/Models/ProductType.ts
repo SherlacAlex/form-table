@@ -1,6 +1,5 @@
-export interface ProductType extends ProductBase, ProductDetails {
+export interface ProductType extends ProductBase, ProductDetails, ProductReview {
   productId: string,
-  productReviews: ProductRating[]
 }
 
 export interface ProductBase {
@@ -32,5 +31,9 @@ export interface ProductDetails {
 export interface ProductRating {
   reviewId: string;
   productRating: number;
-  productReview: string;
+  productFeedback: string;
+}
+
+export interface ProductReview {
+  productReviews: ProductRating[]
 }
