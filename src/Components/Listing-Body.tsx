@@ -160,7 +160,7 @@ function ListingBody() {
       <div className="add-new-contianer my-4">
         <Button radius="xl" color="lime" leftSection={<IconPlus/>} onClick={() => triggerModal()}>Add</Button>
       </div>
-      <div className="table-container w-[80%] my-4 mx-4 overflow-scroll" style={{border: '1px solid var(--mantine-color-gray-3)', borderRadius:'6px'}}>
+      <div className="table-container w-[80%] my-4 mx-4 overflow-auto" style={{border: '1px solid var(--mantine-color-gray-3)', borderRadius:'6px'}}>
         {generateTable()}
       </div>
     </div>
