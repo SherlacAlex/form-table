@@ -70,7 +70,7 @@ function ListingBody() {
       <>
         <Modal.Root opened={modalOpened} onClose={close} >
         <Modal.Overlay />
-        <Modal.Content miw={900} w={1000}>
+        <Modal.Content miw={'85%'}>
           <Modal.Header bg={'indigo.2'}>
             <Modal.Title>{currentProduct?.productTitle ? ` Edit ${currentProduct?.productTitle}` : 'Add Product'}</Modal.Title>
             <Modal.CloseButton />
