@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ProductType } from '../Models/ProductType'
+import { ProductRating, ProductType } from '../Models/ProductType'
 import { ProductState, deleteProduct } from '../Store/ProductSlice'
 import { format } from 'date-fns/format'
 import { IconPlus, IconTrash, IconUnlink,IconX, IconCheck } from '@tabler/icons-react'
-import { ActionIcon, Button, Modal, Table, rem } from '@mantine/core'
+import { ActionIcon, Button, Center, Modal, Rating, Table, rem } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import ProductSurveyForm from './ProductSurveyForm'
 import { ModalsProvider } from '@mantine/modals'
@@ -88,6 +88,19 @@ function ListingBody() {
     )
   }
 
+  const getRating = (product: ProductType) => {
+    let totalRating: number = product.productReviews.reduce((ratings: number, reviews: ProductRating) => reviews.productRating + ratings, 0)
+    if(!!totalRating) {
+      let rating =  (totalRating/ product.productReviews.length);
+      return(
+        <Center>
+          <Rating fractions={4} value={rating} readOnly={true} />
+        </Center>
+      )
+    }
+    return 'N/A';
+  }
+
   const generateRows = () => {
     if(productsList.length > 0) {
       return productsList.map((product: ProductType) => {
@@ -101,6 +114,7 @@ function ListingBody() {
             <Table.Td ta={'center'}>{product.productCategory}</Table.Td>
             <Table.Td ta={'center'}>{product.productPrice}</Table.Td>
             <Table.Td ta={'center'}>{format(product.purchasedDate as Date, "PPP")}</Table.Td>
+            <Table.Td ta={'center'}>{getRating(product)}</Table.Td>
             <Table.Td ta={'center'}>
               <ActionIcon variant="filled" color="red" onClick={() => deleteItem(product)}>
                 <IconTrash style={{ width: '70%', height: '70%' }}/>
@@ -131,6 +145,7 @@ function ListingBody() {
             <Table.Th ta={'center'}>Category</Table.Th>
             <Table.Th ta={'center'}>Price</Table.Th>
             <Table.Th ta={'center'}>Date of purchase</Table.Th>
+            <Table.Th ta={'center'}>Rating</Table.Th>
             <Table.Th ta={'center'}></Table.Th>
           </Table.Tr>
         </Table.Thead>
