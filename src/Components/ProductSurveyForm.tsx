@@ -1,13 +1,14 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ProductBase, ProductDetails, ProductRating, ProductType, ProductReview } from '../Models/ProductType'
 import { ClothFabricType, ClothSizeType, ClothType, MobileDeviceType, ProductCategory, TelevisionSoftwareType } from '../Models/ProductEnums';
 import { useDispatch } from 'react-redux';
 import { Button, Group, Input, Paper, Radio, SegmentedControl, Select, Stepper, Text, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Field, FieldProps, Form, Formik, FormikHelpers, FormikProps } from 'formik';
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
 import { DatePickerInput, DatesProvider } from '@mantine/dates';
 import { addProduct, updateProduct } from '../Store/ProductSlice';
 import ReviewTable from './ReviewTable';
+import './ProducrSurveyForm.css';
 import { formHelperService } from '../services/FormHelperService';
 
 interface ProductSurveyFormType {
@@ -93,15 +94,17 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
   const getNavigationButtons = (formik: FormikProps<ProductBase | ProductDetails | ProductReview>) => {
     return(
       <>
-        <Group justify="end" mt="xl">
-          <Button variant="default" onClick={openDiscardModal}>
-            Cancel
-          </Button>
-          <Button variant="default" disabled={active === 0} onClick={() => handleStepChange(active - 1)}>
-            Back
-          </Button>
-          <Button onClick={() => formik.submitForm()}>{active === 2? 'Submit' :'Next step'}</Button>
-        </Group>
+        <div className="button-container">
+          <Group justify="end" mt="xl">
+            <Button variant="default" onClick={openDiscardModal}>
+              Cancel
+            </Button>
+            <Button variant="default" disabled={active === 0} onClick={() => handleStepChange(active - 1)}>
+              Back
+            </Button>
+            <Button onClick={() => formik.submitForm()}>{active === 2? 'Submit' :'Next step'}</Button>
+          </Group>
+        </div>
       </>
     )
   }
@@ -148,7 +151,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                               <Title order={3}>Description</Title>
                             </div>
                             <div className="control-wrapper w-2/3 grid">
-                              <div className="control items-center">
+                              <div className="control items-center flex">
                                 <Field name='productDescription'>
                                     {
                                       ({field}: FieldProps) => {

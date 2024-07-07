@@ -1,0 +1,24 @@
+@media screen and (max-width: 600px) {
+  .content-control {
+    display: block;
+    margin: 16px 0;
+  }
+
+  .form-container  .mantine-Paper-root {
+    padding: 16px !important;
+  }
+  
+  .content-control .title-container {
+    margin: 8px 0;
+    width: 100%;
+  }
+
+  .content-control .control-wrapper {
+    margin: 8px 0;
+    width: 100%;
+  }
+
+  .button-container div {
+    flex-wrap: nowrap;
+  }
+}
