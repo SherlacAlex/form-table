@@ -2,6 +2,7 @@
   .content-control {
     display: block;
     margin: 16px 0;
+    padding: unset;
   }
 
   .form-container  .mantine-Paper-root {

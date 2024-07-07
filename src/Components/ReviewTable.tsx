@@ -33,16 +33,16 @@ function ReviewTable({ reviews, tableChanged }: ReviewTableProps) {
       return productReviews.map((review: ProductRating, index: number) => {
         return (
           <Table.Tr key={review.reviewId}>
-            <Table.Td ta={'center'}>{index + 1}</Table.Td>
-            <Table.Td ta={'center'}>
+            <Table.Td ta={'center'} p={0}>{index + 1}</Table.Td>
+            <Table.Td ta={'center'} p={0} w={'30%'}>
               <Center>
                 <Rating fractions={4} value={review.productRating} onChange={(val) => { review.productRating = val; updateRow(review, index)}} readOnly={review.productRating? true : false} />
               </Center>
             </Table.Td>
-            <Table.Td ta={'center'} w={350}>
+            <Table.Td ta={'center'} px={0} py={8} w={'50%'}>
               <ProductReview review={review} contentChanged={(rev) => updateRow(rev, index)}/>
             </Table.Td>
-            <Table.Td ta={'center'}>
+            <Table.Td ta={'center'} p={0}>
               <ActionIcon variant="filled" color="red" onClick={() => deleteItem(index)}>
                 <IconTrash style={{ width: '70%', height: '70%' }}/>
               </ActionIcon>
@@ -70,10 +70,10 @@ function ReviewTable({ reviews, tableChanged }: ReviewTableProps) {
         <Table verticalSpacing="sm" highlightOnHover stickyHeader >
             <Table.Thead>
               <Table.Tr>
-                <Table.Th ta={'center'}>#</Table.Th>
-                <Table.Th ta={'center'}>Rating</Table.Th>
-                <Table.Th ta={'center'}>Review</Table.Th>
-                <Table.Th ta={'center'}></Table.Th>
+                <Table.Th ta={'center'} p={0}>#</Table.Th>
+                <Table.Th ta={'center'} p={0} w={'30%'}>Rating</Table.Th>
+                <Table.Th ta={'center'} p={0} w={'50%'}>Review</Table.Th>
+                <Table.Th ta={'center'} p={0}></Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{generateRows()}</Table.Tbody>
@@ -104,7 +104,7 @@ function ReviewTable({ reviews, tableChanged }: ReviewTableProps) {
       <div className="add-new-contianer my-4">
         <Button radius="xl" color="lime" leftSection={<IconPlus/>} onClick={() => addNewReview()}>Add</Button>
       </div>
-      <div className="table-container w-[90%] my-4" style={{border: '1px solid var(--mantine-color-gray-3)', borderRadius:'6px'}}>
+      <div className="table-container w-full my-4" style={{border: '1px solid var(--mantine-color-gray-3)', borderRadius:'6px'}}>
         {generateTable()}
       </div>
     </div>

@@ -113,7 +113,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
     return(
       <>
         <div className="form-container mt-6 w-full">
-          <Paper shadow="xs" radius="lg" withBorder p="xl">
+          <Paper shadow="xs" radius="lg" withBorder p="xs">
             <Stepper active={active} onStepClick={setActive}>
               <Stepper.Step allowStepSelect={shouldAllowSelectStep(0)} label={product?.productTitle ? `${product?.productTitle} Details` : 'Product Details'} description={product?.productTitle ? `Edit ${product?.productTitle}` : 'Add a Product'}>
                 <Formik key={1} enableReinitialize validateOnChange={true} initialValues={defaultDetailsValue} onSubmit={submitBaseForm} validationSchema={detailsValidationSchema} >
@@ -122,7 +122,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                       return(
                         <Form onChange={() => !changed? setChanged(true): null}>
                           {/* Product Title */}
-                          <div className="content-control flex py-4  h-20 justify-items-start">
+                          <div className="content-control flex py-4 mx-4 h-20 justify-items-start">
                             <div className="title-container w-1/3 flex items-center ">
                               <Title order={3}>Title</Title>
                             </div>
@@ -146,7 +146,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                             </div>
                           </div>
                           {/* Product Description */}
-                          <div className="content-control flex  py-4  h-20">
+                          <div className="content-control flex py-4 mx-4 h-20">
                             <div className="title-container w-1/3 flex items-center">
                               <Title order={3}>Description</Title>
                             </div>
@@ -166,7 +166,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                             </div>
                           </div>
                           {/* Product Price */}
-                          <div className="content-control flex  py-4  h-20">
+                          <div className="content-control flex py-4 mx-4 h-20">
                             <div className="title-container w-1/3 flex items-center">
                               <Title order={3}>Product Price</Title>
                             </div>
@@ -191,7 +191,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                             </div>
                           </div>
                           {/* Purchased Date */}
-                          <div className="content-control flex  py-4  h-20">
+                          <div className="content-control flex py-4 mx-4 h-20">
                             <div className="title-container w-1/3 flex items-center">
                               <Title order={3}>Purchased Date</Title>
                             </div>
@@ -228,7 +228,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                       return (
                         <Form onChange={() => !changed? setChanged(true): null}>
                           {/* Product Category */}
-                          <div className="content-control flex  py-4  h-20">
+                          <div className="content-control flex py-4 mx-4 h-20">
                             <div className="title-container w-1/3 flex items-center">
                               <Title order={3}>Category</Title>
                             </div>
@@ -255,10 +255,10 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                           {/* Mobile Choices */}
                           {
                             (formik.values.productCategory === ProductCategory[ProductCategory.Mobile]) && 
-                            <div>
+                            <div className='choices'>
                               <div className="mobile-spec">
                                 {/* Ram Size */}
-                                  <div className="content-control flex  py-4  h-20">
+                                  <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>Ram Size</Title>
                                   </div>
@@ -283,7 +283,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                   </div>
                                   </div>
                                 {/* Storage Size */}
-                                <div className="content-control flex  py-4  h-20">
+                                <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>Storage Size</Title>
                                   </div>
@@ -308,7 +308,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                   </div>
                                 </div>
                                 {/* OS Type */}
-                                <div className="content-control flex  py-4  h-20">
+                                <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>System Software</Title>
                                   </div>
@@ -339,10 +339,10 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                           {/* Television Choices */}
                           {
                             (formik.values.productCategory === ProductCategory[ProductCategory.Television]) &&
-                            <div>
+                            <div className='choices'>
                               <div className="television-spec">
                                 {/* Display Size */}
-                                  <div className="content-control flex  py-4  h-20">
+                                  <div className="content-control flex py-4 mx-4 h-20">
                                     <div className="title-container w-1/3 flex items-center">
                                       <Title order={3}>Display Size</Title>
                                     </div>
@@ -373,7 +373,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                     </div>
                                   </div>
                                 {/* Device Type */}
-                                  <div className="content-control flex  py-4  h-20">
+                                  <div className="content-control flex py-4 mx-4 h-20">
                                     <div className="title-container w-1/3 flex items-center">
                                       <Title order={3}>Device Type</Title>
                                     </div>
@@ -404,10 +404,10 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                           {/* Cloth Choices */}
                           {
                             (formik.values.productCategory === ProductCategory[ProductCategory.Clothes]) &&
-                            <div>
+                            <div className='choices'>
                               <div className="cloth-specs">
                                 {/* Cloth Type */}
-                                <div className="content-control flex  py-4  h-20">
+                                <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>Cloth Type</Title>
                                   </div>
@@ -434,7 +434,7 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
 
                                 {/* Cloth Size */}
                                 {
-                                  <div className="content-control flex  py-4  h-20">
+                                  <div className="content-control flex py-4 mx-4 h-20">
                                     <div className="title-container w-1/3 flex items-center">
                                       <Title order={3}>Cloth Size</Title>
                                     </div>
@@ -461,11 +461,11 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                 }
 
                                 {/* Cloth Fabric */}
-                                <div className="content-control flex  py-4  h-20">
+                                <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>Cloth Fabric</Title>
                                   </div>
-                                  <div className="control-wrapper  w-2/3 grid">
+                                  <div className="control-wrapper w-2/3 grid">
                                     <div className="control flex items-center">
                                       <Field name='productClothSpecs.clothFabric'>
                                         {
@@ -487,11 +487,11 @@ function ProductSurveyForm({product, closeDialog} : ProductSurveyFormType) {
                                 </div>
 
                                 {/* Cloth Color */}
-                                <div className="content-control flex  py-4  h-20">
+                                <div className="content-control flex py-4 mx-4 h-20">
                                   <div className="title-container w-1/3 flex items-center">
                                     <Title order={3}>Cloth Color</Title>
                                   </div>
-                                  <div className="control-wrapper  w-2/3 grid">
+                                  <div className="control-wrapper w-2/3 grid">
                                     <div className="control flex items-center">
                                       <Field name='productClothSpecs.clothColor'>
                                         {
